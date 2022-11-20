@@ -1,22 +1,4 @@
--- Answer to the 2nd Database Assignment Part 1 
--- Term 1, 2021
---
--- CANDIDATE NUMBER : 236636
--- Please insert your candidate number in the line above.
-
--- In each section below put your answer in a new line 
--- BELOW the corresponding comment.
--- Use ONE SQL statement ONLY per question.
--- If you don’t answer a question just leave 
--- the corresponding space blank. 
--- Anything that does not run in SQL you MUST put in comments.
-
--- DO NOT REMOVE ANY LINE FROM THIS FILE.
-
--- START OF ASSIGNMENT CODE
-
-
--- Question 1
+-- Exercise 1
 DROP TABLE IF EXISTS medical_record;
 CREATE TABLE medical_record (
 rec_no     SMALLINT UNSIGNED AUTO_INCREMENT,
@@ -39,12 +21,12 @@ CONSTRAINT FK_doctor
 )ENGINE=MyISAM; -- this permits the rec_no increment to be specific to the patient, not to the entire table
 
 
--- Question 2
+-- Exercise 2
 ALTER TABLE medical_record
 	ADD duration TIME;
 
 
--- Question 3
+-- Exercise 3
 UPDATE doctor
 	SET salary =
 		CASE WHEN expertise LIKE '%ear%' 
@@ -53,24 +35,24 @@ UPDATE doctor
 		END;
 
 
--- Question 4
+-- Exercise 4
 SELECT fname, lname, YEAR(date_of_birth) AS born
 FROM patient
 WHERE city LIKE '%right%'
 ORDER BY lname, fname;
 
 
--- Question 5
+-- Exercise 5
 SELECT ni_number, fname, lname, ROUND((weight/( POWER( (height/100) ,2) ) ),3) AS BMI
 FROM patient
 WHERE TIMESTAMPDIFF(YEAR, date_of_birth, CURDATE()) < 30; -- measures current difference between their dob and the current date and checks if less than 30
 
 
--- Question 6
+-- Exercise 6
 SELECT COUNT(*) AS number FROM doctor;
 
 
--- Quesiton 7
+-- Exercise 7
 SELECT doctor.ni_number, doctor.lname, COUNT(carries_out.doctor) AS operations
 FROM doctor LEFT JOIN carries_out
 ON doctor.ni_number = carries_out.doctor
@@ -79,14 +61,14 @@ GROUP BY doctor.ni_number
 ORDER BY operations desc;
 
 
--- Question 8
+-- Exercise 8
 SELECT DISTINCT mentoree.ni_number, UPPER(LEFT(mentoree.fname, 1)) as init, mentoree.lname
 FROM doctor mentored, doctor mentoree
 WHERE mentored.mentored_by = mentoree.ni_number
 	AND mentoree.mentored_by IS NULL;
 
 
--- Question 9
+-- Exercise 9
 SELECT a.theatre_no as theatre, DATE_FORMAT(a.start_date_time,'%Y-%m-%d %H:%i') as start_time_1, DATE_FORMAT(b.start_date_time,'%H:%i') as start_time_2
 FROM operation a, operation b
 WHERE a.theatre_no = b.theatre_no
@@ -94,7 +76,7 @@ WHERE a.theatre_no = b.theatre_no
 	AND ADDTIME(a.start_date_time, a.duration) > b.start_date_time; -- and the end time of a is after b
 
 
--- Question 10
+-- Exercise 10
 SELECT a.theatre_no, DAY(a.start_date) as dom, MONTHNAME(a.start_date) as month, YEAR(a.start_date) as year, a.num_of_ops as num_ops 
 FROM (SELECT theatre_no, DATE(start_date_time) as start_date, COUNT(*) as num_of_ops
 		FROM operation
@@ -107,7 +89,7 @@ WHERE b.num_of_ops is NULL -- the day(s) with the most operations from 'a' will 
 ORDER BY theatre_no, a.start_date; -- already the normal order, but just in case
 	
 
--- Question 11
+-- Exercise 11
 DROP FUNCTION IF EXISTS usage_theatre;
 DELIMITER $$
 
